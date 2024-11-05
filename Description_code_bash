@@ -1,0 +1,52 @@
+Projet BASH :
+
+DE MONTARDY Simon & WU Celine
+
+
+Description du code et son fonctionnement. 
+
+Le script shell mirrorvf.sh est un utilitaire ecrit en ligne de commande en utilisant le language bash. Celui ci met à jour une copie miroir d'une arborescence source. 
+mirrorvf.sh peut fonctionner pour des répertoires locaux ( sur une même machine ) ou distants (via l'utilisation d'un SSH).
+
+Dans un premier temps celui ci va introduire une fonction help qui sera renvoyé en cas de problème d'utilisation du script;
+celle ci renseigne sur les arguments à utiliser et donne différentes informations concernant le script en lui même. 
+
+Le script va procéder à une étape de vérification auprès de l'utilisateur. 
+En effet celui ne pourra pas executer le script en tant que root. Cela renverra donc l'arret ainsi qu'un message d'explication. 
+
+Ensuite, Le script utilise getopts pour lire et récupérer les options fournies lors de l'appel.
+- -s pour spécifier la machine source
+- -m pour spécifier la machine miroir
+Les arguments des options sont ensuites stockées dans les variables suivantes : source_machine et mirror_machine.
+
+Aussi, de nombreuses conditions sont à vérifier : 
+le script verifie si les options -s et -m ont été utilisées en même temps. Si oui, le script affiche un message d'erreur et quitte le programme étand donné que les options sont mutuellement exclusives. 
+
+Puis il va intialiser les variables necessaires telles que: 
+- les répertoires utilisés
+- les fichiers ignorés
+en traitant les arguments après les options dans l'appel de la fonction. 
+Puis il va vérifier que les deux répertoires existent ET sont différents entre eux. 
+Sinon, il affichera un message d'erreur et quittera le programme.
+
+Enfin, le script utilise rsync qui permet de synchroniser le contenu de la source vers le miroir en utilisant les arguments appropriés pour cette opération.
+Et en excluant les occurences du fichier $HOME/.miroirrc en utilisant un excludeflag. 
+
+Dans le cas où les répertoires sources et mirroirs sont sur la même partition un message préventif est envoyé avec une demande de confirmation avant de procéder à l'opération. 
+
+
+Difficultés éventuelles :
+
+l'utilisateur peut faire face à plusieurs difficultées éventuelles: 
+Dans un premier temps, ne pas oublier d'autoriser le script shell à être executé par l'utilisateur. En utilisant la ligne de terminal chmod +x mirrorvf.sh si ce n'est pas le cas.
+
+De plus, si des répertoires ont des droits d'accès restreints, le script peut ne pas être en mesure de les lire ou de les modifier. 
+Il faut donc s'assurer que les permissions des répertoires sont correctement définies. l'utilisateur peut verifier les permissions avec ls -l /chemin/vers/source
+ls -l /chemin/vers/miroir. 
+
+Une difficulté potentielle est la gestion des répertoires distants via SSH. Le script devrait être capable de se connecter à la machine distante et de synchroniser les répertoires de manière sécurisée. Il faut donc être sûr que les machines distantes sont accessibles. Cela inclut que les deux machines doivent être sur le même réseau et aussi que leurs pares feu doivent être désactivés pour pemettre la transmition des informations. 
+
+
+
+
+
